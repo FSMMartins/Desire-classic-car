@@ -74,7 +74,7 @@
     <div class="w-full h-80 mb-8">
       <iframe
         class="w-full h-full"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.9078629349515!2d-8.685743623491726!3d38.57440237178666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19078d82b26c6d%3A0xd43825b7905dfc6a!2sClassic%20Car%20Restoration%20Garage!5e0!3m2!1sen!2spt!4v1720123456789"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.9078629349515!2d-8.685743623491726!3d38.57440237178666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19078d82b26c6a!2sClassic%20Car%20Restoration%20Garage!5e0!3m2!1sen!2spt!4v1720123456789"
         frameborder="0"
         allowfullscreen
         loading="lazy"></iframe>
@@ -90,7 +90,11 @@
   </div>
 
   <script>
-    const cars = ["car1", "car2"];
+    // Now each car can have a folder and a display name
+    const cars = [
+      { folder: "PrinceSkylineS54", name: "PrinceSkylineS54"},
+      { folder: "Skyline GT-R", name: "Skyline GT-R" }
+    ];
     const gallery = document.getElementById('gallery-container');
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modal-img');
@@ -99,22 +103,32 @@
     let currentCar = "";
 
     cars.forEach(car => {
+      const card = document.createElement('div');
+      card.className = "flex flex-col items-center";
       const img = document.createElement('img');
-      img.src = `cars/${car}/1.jpg`;
-      img.alt = car;
+      img.src = `cars/${car.folder}/1.jpg`;
+      img.alt = car.name;
       img.className = "cursor-pointer rounded shadow hover:shadow-lg transition";
-      img.onclick = () => openModal(car, `cars/${car}/1.jpg`);
-      gallery.appendChild(img);
+      img.onclick = () => openModal(car.folder, `cars/${car.folder}/1.jpg`);
+      card.appendChild(img);
+
+      // Add car name below image
+      const caption = document.createElement('div');
+      caption.className = "mt-2 text-center text-base font-semibold text-gray-700";
+      caption.innerText = car.name;
+      card.appendChild(caption);
+
+      gallery.appendChild(card);
     });
 
-    function openModal(car, src) {
-      currentCar = car;
+    function openModal(carFolder, src) {
+      currentCar = carFolder;
       modal.classList.add('active');
       modalImg.src = src;
       thumbNav.innerHTML = "";
       for (let i = 1; i <= 10; i++) {
         const thumb = new Image();
-        thumb.src = `cars/${car}/${i}.jpg`;
+        thumb.src = `cars/${carFolder}/${i}.jpg`;
         thumb.onerror = () => {};
         thumb.onclick = (e) => {
           e.stopPropagation();
